@@ -9,36 +9,51 @@ public ClientHandler(Socket s){
 }
 public void run(){
 //una volta accettata la connessione il server verificherà che il client si sia già loggato
+
 try{
-PrintWriter pw=new PrintWriter(socket.getOutputStream());
 Scanner scan=new Scanner(System.in);
+PrintWriter pw=new PrintWriter(socket.getOutputStream());
 while (true) {
     String comand=scan.nextLine();
     String[] comands=comand.split(" ");
+  
     String pub_sub=comands[0];
     switch(pub_sub){
         case "publisher":
         System.out.println("Hai selezionato l'opzione Publisher.");
         // Logica per gestire il caso "publisher"
+        pw.println("publisher");
+        pw.flush();
         break;
 
     case "subscribe":
         System.out.println("Hai selezionato l'opzione Subscribe.");
         // Logica per gestire il caso "subscribe"
+        pw.println("subscribe");
+        
         break;
 
     case "quit":
         System.out.println("Hai selezionato l'opzione Quit.");
         // Logica per gestire il caso "quit"
-        pw.println("quit");
+        pw.println("subsribe");
+        pw.close();
         return;
+    case "show":
+        System.out.println("Hai selezionato l' operazione show");
+        pw.println("show");
+       
 
     default:
         System.out.println("Opzione non riconosciuta.");
+        System.err.println("RIPROVA!!!!");
         // Logica per gestire valori non riconosciuti
         break;
-    }
+    
 }
+
+}
+
 } catch (IOException e) {
     System.err.println("IOException caught: " + e);
     e.printStackTrace();
