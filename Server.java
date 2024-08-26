@@ -1,21 +1,23 @@
 import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 public class Server {
-    ArrayList<String> topics=new ArrayList<String>();
-    public static void main(String[]args){
+   
+        public static void main(String[]args){
         if(args.length!=1){
             System.err.println("Inserire solo il numero di porta della Socket");
             return;
         }
         int porta=Integer.parseInt(args[0]);
+        HashMap<String,ArrayList<Utente>> partecipanti=new HashMap<String,ArrayList<Utente>>();//importante per topic e partecipanti, ma l' azione è delegato al thread
         try{
         ServerSocket server=new ServerSocket(porta);
         System.out.println("In attesa di un client...");
         Socket socket=server.accept();
         server.close();
-        System.out.println("Connection has happened with succesfull");
+        System.out.println("Connection has happened with succesful");
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         Scanner from=new Scanner(System.in);
             while (true) {
@@ -26,9 +28,16 @@ public class Server {
                 }
                 if(request.equalsIgnoreCase("quit"))
                 break;
-                else
+                else{
                 System.out.println(request);
-                
+                Thread th=new Thread(new TopicsHandler(socket, request, partecipanti));
+                th.start();
+                try{
+                th.join();
+                } catch (InterruptedException e) {
+                    return;
+                } 
+                }
             }
         socket.close();
         System.out.println("Closed");
