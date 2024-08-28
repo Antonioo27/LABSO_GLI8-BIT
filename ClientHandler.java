@@ -26,6 +26,13 @@ while (true) {
         // Logica per gestire il caso "publisher"
         pw.println(this.hostName+" "+comand);
         pw.flush();
+        Thread ps=new Thread(new PublisherSender(socket, hostName));
+        ps.start();
+        try{
+            ps.join();
+        }catch(InterruptedException e){
+            return;
+        }
         break;
 
     case "subscribe":

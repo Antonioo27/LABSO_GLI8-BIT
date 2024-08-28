@@ -11,7 +11,7 @@ public class Server {
             return;
         }
         int porta=Integer.parseInt(args[0]);
-        HashMap<String,ArrayList<Utente>> partecipanti=new HashMap<String,ArrayList<Utente>>();//importante per topic e partecipanti, ma l' azione è delegato al thread
+       DataServer informationServer=new DataServer(new HashMap<String,ArrayList<Utente>>(), new HashMap<String,ArrayList<Messaggi>>());
         try{
         ServerSocket server=new ServerSocket(porta);
         System.out.println("In attesa di un client...");
@@ -30,7 +30,7 @@ public class Server {
                 break;
                 else{
                 System.out.println(request);
-                Thread th=new Thread(new TopicsHandler(socket, request, partecipanti));
+                Thread th=new Thread(new TopicsHandler(socket, request, informationServer));
                 th.start();
                 try{
                 th.join();
