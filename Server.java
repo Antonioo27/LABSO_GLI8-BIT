@@ -23,7 +23,7 @@ public class Server {
             while (true) {
                 String request = in.readLine();
                 if (request == null) {
-                    System.out.println("Connessione chiusa dal client.");
+                    System.out.println("Connessione chiusa dal clientsss.");
                     break; // Uscire dal ciclo quando il flusso di input è chiuso
                 }
                 if(request.equalsIgnoreCase("quit"))

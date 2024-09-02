@@ -24,7 +24,7 @@ public class TopicsHandler implements Runnable {
             //System.out.println(this.partecipanti.keySet());
             try{
             PrintWriter pw=new PrintWriter(this.socket.getOutputStream());
-            pw.println(this.dServer.partecipanti.keySet());
+            pw.println("show: "+this.dServer.partecipanti.keySet());
             pw.flush();
         }catch(IOException e){
             System.out.println(e.getMessage());
@@ -33,7 +33,9 @@ public class TopicsHandler implements Runnable {
         String[] riga=comandi.split(" ");//riga[0] corrispnde all' utente
         this.dServer.addName(riga[0], riga[1], riga[2]);//nomeUtente, ruolo, topic
                 switch(riga[1]){
-                    case "publisher": Thread pb=new Thread(new PublihersHandler(this.dServer.chats , comandi, socket)) ;
+                    case "publisher": 
+                    System.out.println("hai selezionato publisher");
+                    Thread pb=new Thread(new PublihersHandler(this.dServer.chats , comandi, socket)) ;
                         pb.start();
                         try{
                             pb.join();    

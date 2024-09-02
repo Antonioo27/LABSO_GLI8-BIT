@@ -15,7 +15,7 @@ public class Client{
     System.out.println("Connessione riuscita!!!");
     System.out.println("digitare un comando:");
     //una volta accettata la connessione il server verificherà che il client si sia già loggato
-    Thread clients=new Thread(new ClientHandler(s, host));
+    Thread clients=new Thread(new Sender(s, host));
     Thread receiver=new Thread(new Receiver(s));
     clients.start();
     receiver.start();

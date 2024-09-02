@@ -10,7 +10,7 @@ public class DataServer {
         this.chats=c;
      }
 
-     public void addName(String name, String role, String topic){
+     public synchronized void addName(String name, String role, String topic){
         Utente u=new Utente(name, role);
         if(this.partecipanti.containsKey(topic))//esiste già un topic con questo nome
         this.partecipanti.get(topic).add(u);
@@ -20,14 +20,23 @@ public class DataServer {
             this.partecipanti.put(topic,first);
         }
     }
-    public void addMessage(int id, String sender, String contenuto, String topic){
+    public synchronized void addMessage(int id, String sender, String contenuto, String topic){
 Messaggi message=new Messaggi(id, sender, contenuto);
 if(this.chats.containsKey(topic))//esiste già un topic con questo nome
         this.chats.get(topic).add(message);
-        else{
+        else{ 
             ArrayList<Messaggi> first=new ArrayList<Messaggi>();
             first.add(message);
             this.chats.put(topic,first);
         }
+    }
+    // Metodo sincronizzato per leggere i partecipanti di un topic
+    public synchronized ArrayList<Utente> getPartecipanti(String topic) {
+        return this.partecipanti.getOrDefault(topic, new ArrayList<>());
+    }
+
+    // Metodo sincronizzato per leggere i messaggi di un topic
+    public synchronized ArrayList<Messaggi> getChats(String topic) {
+        return this.chats.getOrDefault(topic, new ArrayList<>());
     }
 }
