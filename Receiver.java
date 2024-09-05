@@ -28,12 +28,15 @@ public class Receiver implements Runnable {
                             System.out.println("Topics: ");
                             response=responses[1].substring(2, responses[1].length()-1);
                             String[] topics=response.split(",");
-                            for(String s:topics)
-                            System.out.println("-"+s);
+                            for(String s:topics){
+                                s=s.trim();
+                                System.out.println("-"+s);
+                            }
+                            
                             break;
                         case "sent":
-                        System.out.println(response);
-                
+                            System.out.println(response);
+                            break;
                     }
                 }
                 /*
@@ -43,7 +46,9 @@ public class Receiver implements Runnable {
                 for(String s:topics)
                 System.out.println("-"+s);
                 */
+                
                 }
+                
         } catch (IOException e) {
             System.err.println("IOException caught: " + e);
             e.printStackTrace();

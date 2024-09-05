@@ -1,6 +1,6 @@
-import java.util.Scanner;
 import java.io.*;
 import java.net.*;
+import java.util.Scanner;
 
 public class Sender implements Runnable {
     Socket socket;
@@ -14,16 +14,15 @@ public void run(){
 
 try{
 Scanner scan=new Scanner(System.in);
-PrintWriter pw=new PrintWriter(socket.getOutputStream());
+PrintWriter pw=new PrintWriter(socket.getOutputStream(),true);
 while (true) {
     String comand=scan.nextLine();
     String[] comands=comand.split(" ");
   
     String pub_sub=comands[0];
     if(pub_sub.equalsIgnoreCase("quit")){
-        pw.close();
-        socket.close();
-    return;
+        pw.println(comand);
+        pw.flush();
     }
     else if(pub_sub.equalsIgnoreCase("show")){
         pw.println(comand);

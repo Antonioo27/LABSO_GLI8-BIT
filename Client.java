@@ -1,6 +1,5 @@
-import java.net.*;
-import java.util.Scanner;
 import java.io.*;
+import java.net.*;
 public class Client{
     public static void main(String[] args) {
     if(args.length!=2){
@@ -20,10 +19,12 @@ public class Client{
     clients.start();
     receiver.start();
     try {
-        clients.join();
         receiver.join();
+        clients.interrupt();
         s.close();
         System.out.println("Socket closed.");
+        System.out.println("receibìver vivo????  "+receiver.isAlive());
+        System.out.println("clientsvivo????  "+clients.isAlive());
     } catch (InterruptedException e) {
         return;
     }

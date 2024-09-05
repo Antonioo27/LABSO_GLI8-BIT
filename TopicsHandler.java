@@ -29,13 +29,23 @@ public class TopicsHandler implements Runnable {
         }catch(IOException e){
             System.out.println(e.getMessage());
         }
-            }else{
+            }else if(comandi.equalsIgnoreCase("quit")){
+            try {
+                PrintWriter pw=new PrintWriter(this.socket.getOutputStream());
+                pw.println("quit");
+                pw.flush();
+                this.socket.close();
+                return;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            }
+            else{
         String[] riga=comandi.split(" ");//riga[0] corrispnde all' utente
         this.dServer.addName(riga[0], riga[1], riga[2]);//nomeUtente, ruolo, topic
                 switch(riga[1]){
                     case "publisher": 
-                    System.out.println("hai selezionato publisher");
-                    Thread pb=new Thread(new PublihersHandler(this.dServer.chats , comandi, socket)) ;
+                    Thread pb=new Thread(new PubliherHandlers(this.dServer , comandi, socket)) ;
                         pb.start();
                         try{
                             pb.join();    
@@ -50,6 +60,7 @@ public class TopicsHandler implements Runnable {
                 }
         }
         System.out.println("fine thread");
+        
     
 }
 

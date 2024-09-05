@@ -1,32 +1,44 @@
-import java.util.HashMap;
-import java.util.Scanner;
-import java.util.ArrayList;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.*;
 
-public class PublihersHandler implements Runnable {
-    HashMap<String,ArrayList<Messaggi>> chats;
+public class PubliherHandlers implements Runnable {
+    DataServer ds;
     String publisher;
     Socket socket;
 
-    public PublihersHandler(HashMap<String,ArrayList<Messaggi>> c, String author, Socket s){
-chats=c;
-publisher=author;
-socket=s;
+    public PubliherHandlers(DataServer d, String author, Socket s){
+this.ds=d;
+this.publisher=author;
+this.socket=s;
     }
 
     public void run(){
         try{
         BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         PrintWriter pw=new PrintWriter(socket.getOutputStream());
-        String parola = in.readLine(); 
-        while (true) {
+        boolean exit=true;//questa variabile serve a far terminare in thread in caso di comando quit
+        while (exit) {
+            String parola = in.readLine(); 
             System.out.println("entra nel while");
+            System.out.println(parola);
+            
             if (parola == null) {
                 System.out.println("Connessione chiusa dal client");
                 break;
             }
-        String[] parole=parola.split(" ");
+            else if(parola.equalsIgnoreCase("show")){
+                    System.out.println("invio show");
+                    pw.println("show: "+this.ds.partecipanti.keySet());
+                    pw.flush();
+            }
+            else if(parola.equalsIgnoreCase("quit")){
+                System.out.println("Scollegamento come publisher");
+                exit=false;
+            }else{
+            String[] parole=parola.split(" ");
             
                 switch(parole[1]) {
                     case "sent": 
@@ -46,16 +58,15 @@ socket=s;
                     break;
                     case "quit":
                     System.out.println("Scollegamento come publisher");
-                    return;
+                    exit=false;
+                    break;
             }
-            
-
-            
             }
-            System.out.println(parola+"\nfinethread publisher");
+        }
+            System.out.println("\nfinethread publisher");
     }catch(IOException e){
             System.err.println("PublishersHandler: IOException caught: " + e);
             e.printStackTrace();
     }
-}
+    }
 }
