@@ -15,16 +15,20 @@ public class Client{
     System.out.println("digitare un comando:");
     //una volta accettata la connessione il server verificherà che il client si sia già loggato
     Thread clients=new Thread(new Sender(s, host));
-    Thread receiver=new Thread(new Receiver(s));
+    Thread receiver=new Thread(new Receiver(s,clients));
+    receiver.start();    
     clients.start();
-    receiver.start();
     try {
         receiver.join();
-        clients.interrupt();
+        clients.join();
         s.close();
         System.out.println("Socket closed.");
-        System.out.println("receibìver vivo????  "+receiver.isAlive());
-        System.out.println("clientsvivo????  "+clients.isAlive());
+        /* 
+          System.out.println(receiver.isAlive());
+        System.out.println(clients.isAlive());
+        */
+        
+        
     } catch (InterruptedException e) {
         return;
     }

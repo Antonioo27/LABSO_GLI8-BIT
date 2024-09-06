@@ -5,9 +5,11 @@ import java.util.Scanner;
 public class Receiver implements Runnable {
 
     Socket s;
+    Thread sender;
 
-    public Receiver(Socket s) {
+    public Receiver(Socket s,Thread sender) {
         this.s = s;
+        this.sender=sender;
     }
 
     @Override
@@ -15,12 +17,9 @@ public class Receiver implements Runnable {
         try {
             Scanner from = new Scanner(this.s.getInputStream());
             while (true) {
-                if(!from.hasNextLine())
-                return;
                 String response = from.nextLine();
                 if(response.equalsIgnoreCase("quit")){
-                    s.close();
-                return;
+                break;
                 }else{
                     String[] responses=response.split(":");
                     switch(responses[0]){
@@ -39,20 +38,21 @@ public class Receiver implements Runnable {
                             break;
                     }
                 }
-                /*
-                System.out.println("Topics: ");
-                response=response.substring(1, response.length()-1);
-                String[] topics=response.split(",");
-                for(String s:topics)
-                System.out.println("-"+s);
-                */
-                
                 }
                 
         } catch (IOException e) {
             System.err.println("IOException caught: " + e);
             e.printStackTrace();
-        } 
+        }finally{
+            try {
+                System.out.println("Receiver closed.");
+                this.sender.interrupt();
+                this.s.close();
+            } catch (IOException e) {
+                System.err.println("IOException caught: " + e);
+                e.printStackTrace();
+            }
+        }
         
     }
 }
