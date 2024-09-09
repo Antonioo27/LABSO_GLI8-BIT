@@ -1,7 +1,7 @@
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
 
 
 public class Receiver implements Runnable {
@@ -17,9 +17,17 @@ public class Receiver implements Runnable {
     @Override
     public void run() {
         try {
-            Scanner from = new Scanner(this.s.getInputStream());
+            BufferedReader from = new BufferedReader(new InputStreamReader(this.s.getInputStream()));
             while (true) {
-                String response = from.nextLine();
+                /*
+                 * try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    break;
+                }
+                 */
+                
+                String response = from.readLine();
                 if(response.equalsIgnoreCase("quit")){
                     from.close();
                 break;
@@ -39,6 +47,16 @@ public class Receiver implements Runnable {
                         case "sent":
                             System.out.println(response);
                             break;
+                        case "list":
+                            System.out.println(">list");
+                            String messaggi_interi="";
+                            String line=responses[1];
+                            while(!line.equalsIgnoreCase("END")){
+                                line=from.readLine();
+                                messaggi_interi=messaggi_interi+line+"\n";
+                            }
+                            System.out.println(messaggi_interi);
+                            break;
                     }
                 }
                 }
@@ -47,7 +65,7 @@ public class Receiver implements Runnable {
             System.err.println("IOException caught: " + e);
             e.printStackTrace();
         
-        }catch (NoSuchElementException e) {
+        }catch (NullPointerException e) {
         } finally{
             try {
                 System.out.println("Receiver closed.");

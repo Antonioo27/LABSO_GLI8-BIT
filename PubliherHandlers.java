@@ -40,18 +40,15 @@ this.socket=s;
                 System.out.println("Scollegamento come publisher");
                 exit=false;
             }else{
-            String[] parole=parola.split(" ");
-            
+            String[] parole=parola.split(" ");//terna nome, "sent", testo oppure duadle nome,"comando"
+            String[] riga=this.publisher.split(" ");//terna nome, ruolo, topic
                 switch(parole[1]) {
                     case "sent": 
                     /* 
                     System.out.println("invio sent");
                     System.out.println("parola=\t"+parola);//terna nome, "sent", testo
                     System.out.println("autore=\t"+this.publisher);
-                    */
-                  
-                    String[] riga=this.publisher.split(" ");//terna nome, ruolo, topic
-                    
+                    */  
                     parole=Arrays.copyOfRange(parole, 2, parole.length);
                     String testo="";
                     for (String s:parole)
@@ -70,19 +67,22 @@ this.socket=s;
                     mess=new Messaggi(this.ds.chats.get(riga[2]).size(),riga[0],testo,formattedDateTime);
                     }
                     System.out.println("il messaggio compare come:\t"+mess.toString());
-                    pw.println("sent: "+mess.toString()); 
+                    pw.println("sent: "+mess.toString()+"\nEND"); 
                     pw.flush();
                     break;
+
                     case "list":
                     System.out.println("invio list");
-                    pw.println("list: hai selezionato il comando list"); 
+                    pw.println("list: "+this.ds.chats.get(riga[2]).toString()); 
                     pw.flush();
                     break;
+
                     case "linstall":
                     System.out.println("invio linstall");
                     pw.println("linstall: hai selezionato il comando linstall");  
                     pw.flush();
                     break;
+                    
                     case "quit":
                     System.out.println("Scollegamento come publisher");
                     exit=false;
