@@ -20,6 +20,7 @@ public class DataServer {
             this.partecipanti.put(topic,first);
         }
     }
+    
     public synchronized void addMessage(int id, String sender, String contenuto, String topic){
 Messaggi message=new Messaggi(id, sender, contenuto);
 if(this.chats.containsKey(topic))//esiste già un topic con questo nome
@@ -30,6 +31,16 @@ if(this.chats.containsKey(topic))//esiste già un topic con questo nome
             this.chats.put(topic,first);
         }
     }
+    public synchronized void addMessage(int id, String sender, String contenuto, String topic,String data_oraString){
+        Messaggi message=new Messaggi(id, sender, contenuto,data_oraString);
+        if(this.chats.containsKey(topic))//esiste già un topic con questo nome
+                this.chats.get(topic).add(message);
+                else{ 
+                    ArrayList<Messaggi> first=new ArrayList<Messaggi>();
+                    first.add(message);
+                    this.chats.put(topic,first);
+                }
+            }
     // Metodo sincronizzato per leggere i partecipanti di un topic
     public synchronized ArrayList<Utente> getPartecipanti(String topic) {
         return this.partecipanti.getOrDefault(topic, new ArrayList<>());

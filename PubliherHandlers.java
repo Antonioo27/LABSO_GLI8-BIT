@@ -1,8 +1,12 @@
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.*;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
 
 public class PubliherHandlers implements Runnable {
     DataServer ds;
@@ -22,8 +26,6 @@ this.socket=s;
         boolean exit=true;//questa variabile serve a far terminare in thread in caso di comando quit
         while (exit) {
             String parola = in.readLine(); 
-            System.out.println("entra nel while");
-            System.out.println(parola);
             
             if (parola == null) {
                 System.out.println("Connessione chiusa dal client");
@@ -42,8 +44,33 @@ this.socket=s;
             
                 switch(parole[1]) {
                     case "sent": 
+                    /* 
                     System.out.println("invio sent");
-                    pw.println("sent: hai selezionato il comando sent"); 
+                    System.out.println("parola=\t"+parola);//terna nome, "sent", testo
+                    System.out.println("autore=\t"+this.publisher);
+                    */
+                  
+                    String[] riga=this.publisher.split(" ");//terna nome, ruolo, topic
+                    
+                    parole=Arrays.copyOfRange(parole, 2, parole.length);
+                    String testo="";
+                    for (String s:parole)
+                    testo=testo+"\t"+s;
+                    riga[2]=riga[2].trim();
+                    Messaggi mess=null;
+                    LocalDateTime now = LocalDateTime.now();
+                    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                    String formattedDateTime = now.format(formatter);
+                    System.out.println("dat e ora formattati\t"+formattedDateTime);
+                    if(this.ds.chats.get(riga[2])==null){
+                    this.ds.addMessage(1, riga[0], testo,riga[2],formattedDateTime);
+                    mess=new Messaggi(1,riga[0],testo,formattedDateTime);
+                    }else{
+                        this.ds.addMessage(this.ds.chats.get(riga[2]).size(), riga[0], testo,riga[2],formattedDateTime);
+                    mess=new Messaggi(this.ds.chats.get(riga[2]).size(),riga[0],testo,formattedDateTime);
+                    }
+                    System.out.println("il messaggio compare come:\t"+mess.toString());
+                    pw.println("sent: "+mess.toString()); 
                     pw.flush();
                     break;
                     case "list":

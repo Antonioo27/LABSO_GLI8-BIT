@@ -1,6 +1,8 @@
 import java.io.IOException;
 import java.net.Socket;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
+
 
 public class Receiver implements Runnable {
 
@@ -19,6 +21,7 @@ public class Receiver implements Runnable {
             while (true) {
                 String response = from.nextLine();
                 if(response.equalsIgnoreCase("quit")){
+                    from.close();
                 break;
                 }else{
                     String[] responses=response.split(":");
@@ -43,7 +46,9 @@ public class Receiver implements Runnable {
         } catch (IOException e) {
             System.err.println("IOException caught: " + e);
             e.printStackTrace();
-        }finally{
+        
+        }catch (NoSuchElementException e) {
+        } finally{
             try {
                 System.out.println("Receiver closed.");
                 this.sender.interrupt();
