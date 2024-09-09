@@ -46,14 +46,21 @@ public class TopicsHandler implements Runnable {
                 switch(riga[1]){
                     case "publisher": 
                     Thread pb=new Thread(new PubliherHandlers(this.dServer , comandi, socket)) ;
-                        pb.start();
-                        try{
-                            pb.join();    
-                        }catch(InterruptedException e){
-                            return;
-                        }
-                        break;
-                    case "subscribe": System.out.println("Thread subscribe amncora da definire");
+                    pb.start();
+                    try{
+                        pb.join();    
+                    }catch(InterruptedException e){
+                        return;
+                    }
+                    break;
+                    case "subscribe": System.out.println("Thread subscribe ancora da definire");
+                    Thread sb=new Thread(new SubscrabeHandler(socket, dServer, riga[2]));
+                    sb.start();
+                    try {
+                        sb.join();
+                    } catch (InterruptedException e) {
+                        return;
+                    }
                     break;
                     default: System.err.print("ERRORE NEL SISTEMA \n RIPROVA");
 

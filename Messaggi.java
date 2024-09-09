@@ -16,8 +16,8 @@ public class Messaggi {
         this.data_ora=data_oraString;
     }
     public String toString(){
-        return "ID: "+this.ID+"\n"+
-        "Testo:\n"+this.pharagraps+"\n"+
+        return "-ID: "+this.ID+"\n"+
+        "Testo: "+this.pharagraps+"\n"+
         "Data: "+this.data_ora+"\n";
     }
     

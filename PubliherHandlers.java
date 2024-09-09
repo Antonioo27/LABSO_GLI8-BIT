@@ -66,34 +66,53 @@ this.socket=s;
                         this.ds.addMessage(this.ds.chats.get(riga[2]).size(), riga[0], testo,riga[2],formattedDateTime);
                     mess=new Messaggi(this.ds.chats.get(riga[2]).size(),riga[0],testo,formattedDateTime);
                     }
-                    //System.out.println("il messaggio compare come:\t"+mess.toString());
-                    //pw.println("sent: "+mess.toString()+"\n"+"END"); 
-                    //pw.flush();
+
+                    //BISOGNERA' POI INVIARE IL MESSAGGIO A TUTTI I SUBSCRIBE CONNESSI
                     break;
 
                     case "list":
                     //System.out.println("invio list");
-                    ArrayList<Messaggi> temp=new ArrayList<Messaggi>();
+                    if(this.ds.chats.get(riga[2])==null||this.ds.chats.get(riga[2]).isEmpty()){
+                        pw.println("errore:nessun messaggio pubblicato");
+                        pw.flush();
+                    }
+                    else{
+                        ArrayList<Messaggi> temp=new ArrayList<Messaggi>();
                     for(Messaggi m : this.ds.chats.get(riga[2])){
                         if(m.sender.equalsIgnoreCase(host))
                         temp.add(m);
                     }
-                    pw.println("list:\n"+temp.toString()); 
-                    pw.println("END");
-                    pw.flush();
+                        if(temp.isEmpty()){
+                            pw.println("errore:non hai ancora pubblicato nessun messaggio su questo topic");
+                            pw.flush();
+                        }else{
+                            pw.println("list:\n"+temp.toString()); 
+                            pw.println("END");
+                            pw.flush();
+                        }
+                    
+                    }
                     break;
-
                     case "linstall":
                     //System.out.println("invio linstall");
-                    pw.println("list:\n"+this.ds.chats.get(riga[2]).toString()); 
-                    pw.println("END");
-                    pw.flush();
-                    break;
+                    if(this.ds.chats.get(riga[2])==null||this.ds.chats.get(riga[2]).isEmpty()){
+                        pw.println("errore:nessun messaggio pubblicato");
+                        pw.flush();
+                    }else{
+                        pw.println("list:\n"+this.ds.chats.get(riga[2]).toString()); 
+                        pw.println("END");
+                        pw.flush();    
+                    }
                     
-                    case "quit":
-                    System.out.println("Scollegamento come publisher");
-                    exit=false;
                     break;
+
+                    default:
+                    System.out.println("hai usato il comando\t"+parola);
+                    System.out.println("COMANDO INESISTENTE");
+                    pw.println("errore: hai usato, nel ruolo di publisher, un comando non disponibile");
+                    pw.flush();
+                    
+                    
             }
             }
         }

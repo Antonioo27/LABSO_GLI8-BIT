@@ -48,7 +48,7 @@ public class Receiver implements Runnable {
                             System.out.println(response);
                             break;
                         case "list":
-                            System.out.println(">list");
+                            System.out.println("Messaggi:");
                             String messaggi_interi="";
                             String line="";
                             while(!line.equalsIgnoreCase("END")){
@@ -59,6 +59,9 @@ public class Receiver implements Runnable {
                             messaggi_interi=messaggi_interi.substring(1, messaggi_interi.length() - 2);//serve a rimuovere le parentesi quadre
                             System.out.println(messaggi_interi);
                             break;
+                        case "errore":
+                        System.out.println("ERRORE: "+responses[1]);
+
                     }
                 }
                 }
