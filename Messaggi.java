@@ -18,7 +18,7 @@ public class Messaggi {
     public String toString(){
         return "ID: "+this.ID+"\n"+
         "Testo:\n"+this.pharagraps+"\n"+
-        "Data: "+this.data_ora ;
+        "Data: "+this.data_ora+"\n";
     }
     
 }

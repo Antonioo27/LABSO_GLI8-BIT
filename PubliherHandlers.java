@@ -41,6 +41,7 @@ this.socket=s;
                 exit=false;
             }else{
             String[] parole=parola.split(" ");//terna nome, "sent", testo oppure duadle nome,"comando"
+            String host=parole[0];
             String[] riga=this.publisher.split(" ");//terna nome, ruolo, topic
                 switch(parole[1]) {
                     case "sent": 
@@ -58,28 +59,34 @@ this.socket=s;
                     LocalDateTime now = LocalDateTime.now();
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
                     String formattedDateTime = now.format(formatter);
-                    System.out.println("dat e ora formattati\t"+formattedDateTime);
                     if(this.ds.chats.get(riga[2])==null){
-                    this.ds.addMessage(1, riga[0], testo,riga[2],formattedDateTime);
-                    mess=new Messaggi(1,riga[0],testo,formattedDateTime);
+                    this.ds.addMessage(0, riga[0], testo,riga[2],formattedDateTime);
+                    mess=new Messaggi(0,riga[0],testo,formattedDateTime);
                     }else{
                         this.ds.addMessage(this.ds.chats.get(riga[2]).size(), riga[0], testo,riga[2],formattedDateTime);
                     mess=new Messaggi(this.ds.chats.get(riga[2]).size(),riga[0],testo,formattedDateTime);
                     }
-                    System.out.println("il messaggio compare come:\t"+mess.toString());
-                    pw.println("sent: "+mess.toString()+"\nEND"); 
-                    pw.flush();
+                    //System.out.println("il messaggio compare come:\t"+mess.toString());
+                    //pw.println("sent: "+mess.toString()+"\n"+"END"); 
+                    //pw.flush();
                     break;
 
                     case "list":
-                    System.out.println("invio list");
-                    pw.println("list: "+this.ds.chats.get(riga[2]).toString()); 
+                    //System.out.println("invio list");
+                    ArrayList<Messaggi> temp=new ArrayList<Messaggi>();
+                    for(Messaggi m : this.ds.chats.get(riga[2])){
+                        if(m.sender.equalsIgnoreCase(host))
+                        temp.add(m);
+                    }
+                    pw.println("list:\n"+temp.toString()); 
+                    pw.println("END");
                     pw.flush();
                     break;
 
                     case "linstall":
-                    System.out.println("invio linstall");
-                    pw.println("linstall: hai selezionato il comando linstall");  
+                    //System.out.println("invio linstall");
+                    pw.println("list:\n"+this.ds.chats.get(riga[2]).toString()); 
+                    pw.println("END");
                     pw.flush();
                     break;
                     
