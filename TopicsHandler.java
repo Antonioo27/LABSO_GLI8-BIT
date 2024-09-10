@@ -70,7 +70,6 @@ public class TopicsHandler implements Runnable {
 
                 }
             }
-            System.out.println("avvertenza: ");
             try {
                 Thread.sleep(1500);
                 //piccolo intervallo che non si nota ma serve così che il sender riesca a rilevare la interrupt

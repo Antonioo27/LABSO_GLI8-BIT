@@ -22,12 +22,13 @@ public class ServerReceiver implements Runnable {
         while (true) { 
             String command=scan.nextLine();
             if(command.equalsIgnoreCase("quit")){//facendo ciò il receiver del client riceve il messaggio quit ed esce da tutto
-                pw.println("quit");
+                pw.println("quit server");
                 pw.flush();
                 scan.close();
                 break;
             }
-            switch (command) {
+            String[] commands=command.split(" ");
+            switch (commands[0]) {
                 case "show":
                     Set<String> topics=this.dataServer.partecipanti.keySet();
                     System.out.println("Topics:");

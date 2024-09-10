@@ -30,7 +30,10 @@ public class Receiver implements Runnable {
                 
                 String response = from.readLine();
                 if(response.equalsIgnoreCase("quit")){
+                    break;
+                }else if (response.equalsIgnoreCase("quit server")) {
                     from.close();
+                    System.out.println("Il server sarà chiuso automaticamente al termine del prossimo comando");
                 break;
                 }else{
                     String[] responses=response.split(":");

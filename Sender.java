@@ -1,10 +1,12 @@
 import java.io.*;
 import java.net.*;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 public class Sender implements Runnable {
     Socket socket;
     String hostName="";
+    
 public Sender(Socket s, String name){
     this.socket=s;
     this.hostName=name;
@@ -14,9 +16,9 @@ public Sender(Socket s, String name){
     public void run(){
 //una volta accettata la connessione il server verificherà che il client si sia già loggato
 
-Scanner scan=new Scanner(System.in);
-try{
 
+try{
+Scanner scan=new Scanner(System.in);
 PrintWriter pw=new PrintWriter(socket.getOutputStream(),true);
 while (true) {
         if(Thread.currentThread().isInterrupted()||this.socket.isClosed()){
@@ -51,7 +53,10 @@ while (true) {
 } catch (IOException e) {
     System.err.println("IOException caught: " + e);
     e.printStackTrace();
-} finally{
+}catch(NoSuchElementException e){
+
+} 
+finally{
     System.out.println("Sender closed.");
 }
 
