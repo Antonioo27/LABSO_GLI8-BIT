@@ -18,6 +18,7 @@ public class Receiver implements Runnable {
     public void run() {
         try {
             BufferedReader from = new BufferedReader(new InputStreamReader(this.s.getInputStream()));
+            
             while (true) {
                 /*
                  * try {
@@ -61,6 +62,9 @@ public class Receiver implements Runnable {
                             break;
                         case "errore":
                         System.out.println("ERRORE: "+responses[1]);
+                        break;
+                        case "avvertenza":
+                        System.out.println("Attendi un momento stiamo effettuando il logout...");
 
                     }
                 }

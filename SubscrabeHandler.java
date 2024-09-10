@@ -33,26 +33,35 @@ public class SubscrabeHandler implements Runnable {
                 }
                 else{
                     String[] parole=parola.split(" ");
-                    switch (parole[1]) {
-                        case "linstall":
-                        //System.out.println(this.topic);
-                        if(this.ds.chats.get(this.topic)==null||this.ds.chats.get(this.topic).isEmpty()){
-                            pw.println("errore:ancora nessun messaggio pubblicato");
-                            pw.flush();
-                        }
-                        else{
-                            pw.println("list:\n"+this.ds.chats.get(this.topic).toString()); 
-                            pw.println("END");
-                            pw.flush();
-                        } 
-                        break;
-
-                        default:
-                            System.out.println("hai usato il comando\t"+parola);
-                            System.out.println("COMANDO INESISTENTE");
+                    if(parole.length==1){
+                        System.out.println("COMANDO INESISTENTE");
                             pw.println("errore: hai usato come subscribe un comando non disponibile o disponibile solo nel caso di publisher");
                             pw.flush();
+                    }else{
+                        switch (parole[1]) {
+                            case "linstall":
+                            //System.out.println(this.topic);
+                            if(this.ds.chats.get(this.topic)==null||this.ds.chats.get(this.topic).isEmpty()){
+                                pw.println("errore:ancora nessun messaggio pubblicato");
+                                pw.flush();
+                            }
+                            else{
+                                pw.println("list:\n"+this.ds.chats.get(this.topic).toString()); 
+                                pw.println("END");
+                                pw.flush();
+                            } 
+                            break;
+    
+                            default:
+                                System.out.println("hai usato il comando\t"+parola);
+                                System.out.println("COMANDO INESISTENTE");
+                                pw.println("errore: hai usato come subscribe un comando non disponibile o disponibile solo nel caso di publisher");
+                                pw.flush();
+                        }
+
                     }
+
+                    
 
                 }
             }

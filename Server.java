@@ -2,7 +2,6 @@ import java.io.*;
 import java.net.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Scanner;
 public class Server {
    
         public static void main(String[]args){
@@ -18,9 +17,13 @@ public class Server {
         Socket socket=server.accept();
         server.close();
         System.out.println("Connection has happened with succesful");
-        BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        Scanner from=new Scanner(System.in);
-            while (true) {
+        //BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        Thread sr=new Thread(new ServerReceiver(informationServer,socket));
+        Thread th=new Thread(new TopicsHandler(socket, informationServer,sr));
+        sr.start();
+        th.start();
+        /*
+         while (true) {
                 String request = in.readLine();
                 if (request == null) {
                     System.out.println("Connessione chiusa dal clientsss.");
@@ -37,8 +40,18 @@ public class Server {
                 } catch (InterruptedException e) {
                     return;
                 } 
+                
                 }
             }
+         */
+            
+            try{
+                th.join();
+                sr.join();
+            }catch(InterruptedException e){
+
+            }
+        
         socket.close();
         System.out.println("Closed");
     }catch(IOException e){

@@ -1,34 +1,36 @@
-
 import java.io.*;
 import java.net.*;
+
 public class TopicsHandler implements Runnable {
     DataServer dServer;
-
-    //in questo dizionario per ogni topic sarà possibile visionare tutti i suoi utenti
-   
     Socket socket;
-    String rigaDiComando;
-    public TopicsHandler(Socket s, String frase, DataServer ds){
+    Thread ServerRec;
+
+    public TopicsHandler(Socket s, DataServer ds, Thread sv){
         this.socket=s;
-        this.rigaDiComando=frase;
         this.dServer=ds;
+        this.ServerRec=sv;
     }
 
    
 
     public void run(){//chiaramente si dovranno creare altri thread che gestiscano publisher e subscribe
+        try{
+      BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+      while (true) {
         
-        String comandi=this.rigaDiComando;
-        
+        String comandi=in.readLine();
+
         if(comandi.equalsIgnoreCase("show")){
-            //System.out.println(this.partecipanti.keySet());
-            try{
-            PrintWriter pw=new PrintWriter(this.socket.getOutputStream());
-            pw.println("show: "+this.dServer.partecipanti.keySet());
-            pw.flush();
-        }catch(IOException e){
-            System.out.println(e.getMessage());
-        }
+            synchronized (this.dServer) {
+                try{
+                    PrintWriter pw=new PrintWriter(this.socket.getOutputStream());
+                    pw.println("show: "+this.dServer.partecipanti.keySet());
+                    pw.flush();
+                }catch(IOException e){
+                    System.out.println(e.getMessage());
+                }
+            }
             }else if(comandi.equalsIgnoreCase("quit")){
             try {
                 PrintWriter pw=new PrintWriter(this.socket.getOutputStream());
@@ -42,7 +44,9 @@ public class TopicsHandler implements Runnable {
             }
             else{
         String[] riga=comandi.split(" ");//riga[0] corrispnde all' utente
-        this.dServer.addName(riga[0], riga[1], riga[2]);//nomeUtente, ruolo, topic
+        synchronized (this.dServer) {
+            this.dServer.addName(riga[0], riga[1], riga[2]);//nomeUtente, ruolo, topic
+        }
                 switch(riga[1]){
                     case "publisher": 
                     Thread pb=new Thread(new PubliherHandlers(this.dServer , comandi, socket)) ;
@@ -65,10 +69,26 @@ public class TopicsHandler implements Runnable {
                     default: System.err.print("ERRORE NEL SISTEMA \n RIPROVA");
 
                 }
-        }
-        System.out.println("fine thread");
+            }
+            System.out.println("avvertenza: ");
+            try {
+                Thread.sleep(1500);
+                //piccolo intervallo che non si nota ma serve così che il sender riesca a rilevare la interrupt
+            } catch (InterruptedException e) {
+                break;
+            }
+            if(!this.ServerRec.isAlive())
+            break;
+
+      }
         
-    
+    }catch(IOException e){
+        System.err.println(e.getMessage());
+    }catch(NullPointerException e){
+
+    }finally{
+       System.out.println("fine thread topic handler");
+    }
 }
 
 }        
