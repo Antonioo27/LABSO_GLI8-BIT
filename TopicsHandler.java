@@ -44,11 +44,12 @@ public class TopicsHandler implements Runnable {
             }
             else{
         String[] riga=comandi.split(" ");//riga[0] corrispnde all' utente
-        synchronized (this.dServer) {
-            this.dServer.addName(riga[0], riga[1], riga[2]);//nomeUtente, ruolo, topic
-        }
+        
                 switch(riga[1]){
                     case "publisher": 
+                    synchronized (this.dServer) {
+                        this.dServer.addName(riga[0], riga[1], riga[2]);//nomeUtente, ruolo, topic
+                    }
                     Thread pb=new Thread(new PubliherHandlers(this.dServer , comandi, socket)) ;
                     pb.start();
                     try{
@@ -57,7 +58,10 @@ public class TopicsHandler implements Runnable {
                         return;
                     }
                     break;
-                    case "subscribe": System.out.println("Thread subscribe ancora da definire");
+                    case "subscribe": 
+                    synchronized (this.dServer) {
+                        this.dServer.addName(riga[0], riga[1], riga[2]);//nomeUtente, ruolo, topic
+                    }
                     Thread sb=new Thread(new SubscrabeHandler(socket, dServer, riga[2]));
                     sb.start();
                     try {

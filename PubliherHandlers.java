@@ -60,11 +60,12 @@ this.socket=s;
                     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
                     String formattedDateTime = now.format(formatter);
                     if(this.ds.chats.get(riga[2])==null){
-                    this.ds.addMessage(0, riga[0], testo,riga[2],formattedDateTime);
-                    mess=new Messaggi(0,riga[0],testo,formattedDateTime);
+                    this.ds.addMessage(1, riga[0], testo,riga[2],formattedDateTime);
+                    mess=new Messaggi(1,riga[0],testo,formattedDateTime);
                     }else{
-                        this.ds.addMessage(this.ds.chats.get(riga[2]).size(), riga[0], testo,riga[2],formattedDateTime);
-                    mess=new Messaggi(this.ds.chats.get(riga[2]).size(),riga[0],testo,formattedDateTime);
+                        int id=this.ds.chats.get(riga[2]).getLast().ID+1;
+                        this.ds.addMessage(id, riga[0], testo,riga[2],formattedDateTime);
+                    mess=new Messaggi(id,riga[0],testo,formattedDateTime);
                     }
 
                     //BISOGNERA' POI INVIARE IL MESSAGGIO A TUTTI I SUBSCRIBE CONNESSI

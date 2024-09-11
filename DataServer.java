@@ -50,4 +50,7 @@ if(this.chats.containsKey(topic))//esiste già un topic con questo nome
     public synchronized ArrayList<Messaggi> getChats(String topic) {
         return this.chats.getOrDefault(topic, new ArrayList<>());
     }
+    public void setChats(String topic,ArrayList<Messaggi> new_chat){
+        this.chats.put(topic,new_chat);
+    }
 }

@@ -37,7 +37,16 @@ public class ServerReceiver implements Runnable {
                     break;
 
                 case "inspect":
-                    System.out.println("thread inspect da definire");
+                    try {
+                        String topic=commands[1];
+                        Thread iter=new Thread(new IteractiveSession(this.dataServer, topic));
+                        iter.start();
+                        iter.join();
+                    } catch (IndexOutOfBoundsException e) {
+                        System.out.println("Dopo il comando <inspect> bisogna inserire il <nome del topic> da esaminare");
+                    }catch(InterruptedException e){
+                        e.getStackTrace();
+                    }
                     break;
                 default:
                     System.err.println("Questo comando non esiste");
